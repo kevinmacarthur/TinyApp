@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title>TinyApp</title>
+  </head>
+  <header>
+    <% include ./partials/_header %>
+  </header>
+  <body>
+   <h1> What are the parts of the URL? </h1>
+
+    <form action="/" method="GET">
+    <input name="filter">
+      <input type="submit" value="Search!">
+    </form>
+    <li> long url: <%=  fullUrl %> </li>
+
+    <li> short url: <%=  shortUrl %> </li>
+
+    <p>Go back to <a href="/">home page</a></p>
+
+    <footer>
+      <p>Current date and time is <%= new Date() %></p>
+    </footer>
+  </body>
+</html>
