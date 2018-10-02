@@ -10,6 +10,15 @@ var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+//Generates Random 6 digit Alphanumeric code
+function generateRandomString() {
+  let randString = ""
+  let possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  for (let i = 0; i < 6; i++) {
+    randString += possibleChars.charAt(Math.floor(Math.random() * possibleChars.length))
+  }
+  return randString
+}
 
 app.get("/", (req, res) => {
   res.send("Hello!, Welcome to the HomePage, There is actually nothing really here");
@@ -29,6 +38,10 @@ app.get("/urls", function (req, res) {
   res.render("urls_index", { urls: urlDatabase});
 });
 
+app.post("/urls", (req, res) => {
+  console.log(req.body);  // debug statement to see POST parameters
+  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+});
 
 
 app.get("/urls.json", (req, res) => {
