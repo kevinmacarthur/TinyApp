@@ -2,15 +2,18 @@ var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
 
+
 app.set("view engine", "ejs")
+var cookieParser = require('cookie-parser')
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
-//Generates Random 6 digit Alphanumeric code
+//Generates Random 6 digit Alphanumeric code for short url
 function generateRandomString() {
   let randString = ""
   let possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -24,40 +27,65 @@ app.get("/", (req, res) => {
   res.redirect("/urls")
 });
 
+//Deals with new Url Page
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  let templateVars = {
+    username: req.cookies["username"]
+  }
+  res.render("urls_new", templateVars);
 });
 
-app.get("/urls/:id/delete", function (req, res) {
-  res.render("urls_new")
-});
-
+//Deletes a url from the list
 app.post("/urls/:id/delete", function (req, res) {
   delete urlDatabase[req.params.id]
   res.redirect("/urls")
 });
 
+//Creates a cookie on login
+app.post("/urls/login", function (req, res) {
+  let cookie = req.body.username
+  res.cookie("username", cookie)  //sets a cookie named username to the value of whats entered to sign in
+  res.redirect("/urls")
+});
+
+//Logs out of website and clears the username cookie
+app.post("/urls/logout", function (req, res){
+  res.clearCookie("username")
+  res.redirect("/urls")
+})
+
+//Updates an exist Long url
 app.post("/urls/:id/update", function (req,res) {
   urlDatabase[req.params.id] = (req.body.updateURL)
   res.redirect("/urls")
 })
 
+//URL Page for specific url
 app.get("/urls/:id", function (req, res) {
-  res.render("urls_show", {
+  let templateVars = {
     shortUrl: req.params.id,
-    fullUrl: urlDatabase[req.params.id]});
+    fullUrl: urlDatabase[req.params.id],
+    username: req.cookies["username"]
+  }
+  res.render("urls_show", templateVars);
 });
 
+//List of URL Pages
 app.get("/urls", function (req, res) {
-  res.render("urls_index", { urls: urlDatabase});
+  let templateVars = {
+    urls: urlDatabase,
+    username: req.cookies["username"]
+  }
+  res.render("urls_index", templateVars);
 });
 
+//Creates a random short URL for entered url and adds to list
 app.post("/urls", (req, res) => {
   let rand = generateRandomString ()
   urlDatabase[rand] = req.body.longURL;
-  res.redirect('http://localhost:8080/urls/' + rand);
+  res.redirect('urls/' + rand);
 });
-
+//Sends user to actual long url
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL]
   res.redirect(longURL);
