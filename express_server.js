@@ -21,11 +21,20 @@ function generateRandomString() {
 }
 
 app.get("/", (req, res) => {
-  res.send("Hello!, Welcome to the HomePage, There is actually nothing really here");
+  res.redirect("/urls")
 });
 
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
+});
+
+app.get("/urls/:id/delete", function (req, res) {
+  res.render("urls_new")
+});
+
+app.post("/urls/:id/delete", function (req, res) {
+  delete urlDatabase[req.params.id]
+  res.redirect("/urls")
 });
 
 app.get("/urls/:id", function (req, res) {
@@ -41,7 +50,6 @@ app.get("/urls", function (req, res) {
 app.post("/urls", (req, res) => {
   let rand = generateRandomString ()
   urlDatabase[rand] = req.body.longURL;
-  console.log(urlDatabase)
   res.redirect('http://localhost:8080/urls/' + rand);
 });
 

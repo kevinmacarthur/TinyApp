@@ -13,6 +13,9 @@
   <body>
         <% for (var key in urls) { %>
     <li> <b> url: </b> <%=  urls[key] %> <b> key: </b> <%= key %> </li>
+    <form method="POST" action="/urls/<%= key%>/delete">
+      <button type ="submit"> Delete!<img src ="https://openclipart.org/download/226230/trash.svg" width = "8" height = "10"></button>
+    </form>
     <% } %>
 
 
