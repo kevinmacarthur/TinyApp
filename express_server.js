@@ -38,7 +38,6 @@ app.post("/urls/:id/delete", function (req, res) {
 });
 
 app.post("/urls/:id/update", function (req,res) {
-  // urlDatabase[req.params.id] = req.body
   urlDatabase[req.params.id] = (req.body.updateURL)
   res.redirect("/urls")
 })
