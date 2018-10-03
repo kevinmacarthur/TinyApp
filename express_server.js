@@ -13,6 +13,9 @@ var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+const users = {}
+
 //Generates Random 6 digit Alphanumeric code for short url
 function generateRandomString() {
   let randString = ""
@@ -95,6 +98,44 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
   console.log(res)
 });
+
+//REGISTRATION
+app.get("/register", function (req, res){
+ let templateVars = {
+    username: req.cookies["username"]
+  }
+  res.render("urls_register", templateVars);
+});
+
+// function SearchEmail() {
+//   for (var userEmail in users) {
+//     console.log(userEmail.email)
+//   }
+// }
+// SearchEmail()
+
+app.post("/register", function (req,res){
+  let email = req.body.email
+  let password = req.body.password
+  if (!email || !password) {            //Handles error if either email or password are blank
+    res.statusCode = 400
+    res.send('None Shall Pass')
+    console.log('Status Code: ', res.statusCode)
+  // } else if () {
+
+  } else {
+    let rand = generateRandomString ()
+    users[rand] = {
+      id: rand,
+      email: email,
+      password: password
+    }
+    res.cookie("UserID", rand) //Assign cookie email to value of email .... cookie cant handle @ symbol
+    res.clearCookie('email')
+    res.redirect("/urls")
+    console.log("User Database: ", users)
+  }
+})
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
