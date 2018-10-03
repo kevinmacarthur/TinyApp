@@ -42,9 +42,13 @@ app.post("/urls", (req, res) => {
   let rand = generateRandomString ()
   urlDatabase[rand] = req.body.longURL;
   console.log(urlDatabase)
-  res.send("Ok");
+  res.redirect('http://localhost:8080/urls/' + rand);
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  let longURL = urlDatabase[req.params.shortURL]
+  res.redirect(longURL);
+});
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);

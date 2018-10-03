@@ -3,20 +3,21 @@
 <html lang="en">
   <head>
     <title>TinyApp</title>
+    <% include ./partials/_head%>
   </head>
 
   <header>
     <% include ./partials/_header %>
   </header>
-  <h1>Original URL </h1>
+  <h2>List of Urls </h2>
   <body>
         <% for (var key in urls) { %>
     <li> <b> url: </b> <%=  urls[key] %> <b> key: </b> <%= key %> </li>
     <% } %>
-    <p>Go back to <a href="/">home page</a></p>
+
 
     <footer>
-      <p>Current date and time is <%= new Date() %></p>
+      <p><% include ./partials/_footer%></p>
     </footer>
   </body>
 </html>
