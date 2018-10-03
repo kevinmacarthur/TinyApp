@@ -10,10 +10,14 @@
   </header>
   <body>
 
-    <li> long url: <%=  fullUrl %> </li>
+    <li> Current long url: <%=  fullUrl %> </li>
+    <li> Current short url: <%=  shortUrl %> </li>
 
-    <li> short url: <%=  shortUrl %> </li>
+    <form action="/urls/<%= shortUrl %>/update" method="POST">
+    <input name="updateURL" value="">
+    <input type="submit" value="Update!">
 
+  </form>
 
     <footer>
       <p><% include ./partials/_footer%></p>

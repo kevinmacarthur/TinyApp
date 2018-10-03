@@ -37,6 +37,12 @@ app.post("/urls/:id/delete", function (req, res) {
   res.redirect("/urls")
 });
 
+app.post("/urls/:id/update", function (req,res) {
+  // urlDatabase[req.params.id] = req.body
+  urlDatabase[req.params.id] = (req.body.updateURL)
+  res.redirect("/urls")
+})
+
 app.get("/urls/:id", function (req, res) {
   res.render("urls_show", {
     shortUrl: req.params.id,
