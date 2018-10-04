@@ -10,7 +10,7 @@
   </header>
   <body>
 
-    <li> Current long url: <%=  fullUrl %> </li>
+    <li> Current long url: <%=  fullUrl.longUrl %> </li>
     <li> Current short url: <%=  shortUrl %> </li>
 
     <form action="/urls/<%= shortUrl %>/update" method="POST">
