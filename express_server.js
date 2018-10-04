@@ -32,13 +32,12 @@ function generateRandomString() {
 }
 //FUNCTION CHECKS IF EMAIL ALREADY EXISTS IN USERS OBJECT
 function emailExists(email) {
-  for (var userEmail in users) {
-    if (email === users[userEmail].email) {
+  for (var userID in users) {
+    if (email === users[userID].email) {
       return true;
-    } else {
-      return false;
     }
   }
+  return false
 }
 
 //Deals with homePage
@@ -64,26 +63,29 @@ app.post("/urls/:id/delete", function (req, res) {
 app.post("/urls/login", function (req, res) {
   let email = req.body.email
   let password = req.body.password
-  let rand = generateRandomString()
-  // let currentUserId = req.cookies.UserID
-  console.log('Current User ID', req.cookies.user_ID )
-  if (!currentUserId) {res.cookie("UserID", rand)};  //Sets a cookie if one hasnt been set
-  if (!emailExists(email)) {       //Handles error if email doesnt exist yet
+  let emailExist = false
+  let passwordExist = false
+  for (var user in users) {
+    if (users[user].email === email){
+      emailExist = true
+      if(users[user].password === password){
+        passwordExist = true
+        res.cookie("user_ID", users[user].id)
+        res.redirect("/urls")
+      }
+    }
+  }
+  // Checking for message to send
+  if (!emailExist){
     res.statusCode = 403
     res.send('Error: This account does not exist please register email')
-    console.log("User", email, "doesnt exist in Database", users)
-  } else if (emailExists(email) && password !== users[currentUserId].password) {  //handles incorrect password
+  }
+  if (!passwordExist) {
     res.statusCode = 403
     res.send('Error: Incorrect Password')
-    console.log("Password: ", password, "doesnt match Database password", users[currentUserId].password)
-  } else if (emailExists(email) && password === users[currentUserId].password) {                        //if email and password match log user in
-  res.redirect("/urls")
-    console.log("cookies: ", currentUserId)
-    console.log("user", "exists", users)
-  } else {
-    res.redirect("/urls/login")
   }
-});
+})
+
 
 //Handles Login Page
 app.get("/urls/login", function (req, res){
@@ -117,8 +119,6 @@ app.get("/urls/:id", function (req, res) {
 
 //List of URL Pages and Homepage
 app.get("/urls", function (req, res) {
-  console.log("Cookies", req.cookies)
-  console.log("User Database: ", users)
   let templateVars = {
     urls: urlDatabase,
     user: users[req.cookies["user_ID"]],
