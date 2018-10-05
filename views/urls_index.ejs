@@ -17,7 +17,7 @@
       <p style="padding-left:50px">
         <b> Short URL: </b> <a href = "/urls/<%= url.shortUrl %>"> <%= url.shortUrl %> </a>
         <b> Long URL: </b> <%=  url.longUrl %> <a href="/urls/<%= url.shortUrl %>"> Edit Link </a>
-        <form style="padding-left:50px" method="POST" action="/urls/<%= url.shortUrl%>/delete">
+        <form style="padding-left:50px" method="POST" action="/urls/<%= url.shortUrl%>/delete?_method=DELETE"">
           <input type ="submit" value="Delete">
         </form>
       </p>
