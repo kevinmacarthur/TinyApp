@@ -2,21 +2,20 @@ var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
 
-
 app.set("view engine", "ejs");
+
 const bcrypt = require('bcrypt');
 const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({extended: true}));
 const cookieSession = require('cookie-session');
 const methodOverride = require('method-override');
+
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 
 app.use(cookieSession({
   name: 'session',
   secret: 'my secret string'
 }));
-
-
 
 // PLACEHOLDER DATA STRUCTURES
 var urlDatabase = {
@@ -90,7 +89,6 @@ function findUrl(shortUrl) {
   return matchingUrls;
 }
 
-
 //FUNCTION TO FIND IF short URL EXISTS
 function findUser(shortURL) {
   matchingUrls = [];
@@ -149,6 +147,7 @@ app.post("/urls/login", function (req, res) {
       }
     }
   }
+
   // WHAT GETS SENT ON ERROR MESSAGES
   if (!emailExist){
     res.statusCode = 403;
@@ -211,7 +210,6 @@ app.get("/urls", function (req, res) {
   }
 });
 
-
 //Creates a random short URL for entered url and adds to list
 app.post("/urls", (req, res) => {
   let rand = generateRandomString ();
@@ -236,13 +234,6 @@ app.get("/u/:shortURL", (req, res) => {
     }
   }
 });
-
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-  console.log(res);
-});
-
-
 
 //REGISTRATION INFORMATION
 app.get("/register", function (req, res){
