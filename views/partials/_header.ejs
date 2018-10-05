@@ -3,22 +3,17 @@
 <Header>
   <h1> Kevs Lovely TinyApp </h1>
   <% if (user) { %>
-
-  <form action="/urls/logout" method="POST">
-    <p> Logged in as <%= user.email %> </p>
-    <input type="submit" value="logout">
-  </form>
+    <form action="/urls/logout" method="POST">
+      <p style="font-size:20px"> Logged in as <%= user.email %> </p>
+      <input type="submit" value="Logout">
+      <a href = "/urls/new" style="font-size:20px"> Shorten a New URL!!! </a>
+    </form>
   <% } else { %>
-    <p>Hello, please log in or register below to access tiny url</p>
-  <!-- <form action="/urls/login" method="POST">
-    <input name="username" value="" placeholder="Enter Username" style="width: 200px">
-    <input type="submit" value="Sign In">
-  </form> -->
-  <%  } %>
-  <a href="/urls/login"> Log In! </a>
-  <a href ="/register"> Register Now! </a>
+    <h2>Hello,
+    If you already have an account please <a href="/urls/login"> Log in </a> to access tiny url
 
+    If not click here to <a href ="/register"> Register </a>
+   </h2>
+  <%  } %>
 </header>
 
-
-<% // represent commented out%>
