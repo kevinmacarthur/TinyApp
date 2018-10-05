@@ -4,8 +4,13 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 # Final Product
 
+Registration Page
 ![""](https://github.com/kevinmacarthur/TinyApp/blob/master/TinyApp_Register.png)
-![""](https://github.com/kevinmacarthur/TinyApp/commit/069b91c02372969f9ee448857c6f5e426848587f)
+
+Shorten a Url
+![""](https://github.com/kevinmacarthur/TinyApp/blob/master/TinyApp_Shorten.png)
+
+List of your Urls
 ![""](https://github.com/kevinmacarthur/TinyApp/blob/master/TinyApp_Urls.png)
 
 ## Dependencies
