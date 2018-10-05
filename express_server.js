@@ -4,11 +4,14 @@ var PORT = 8080; // default port 8080
 
 
 app.set("view engine", "ejs")
+const bcrypt = require('bcrypt');
 var cookieParser = require('cookie-parser')
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
+
+// PLACEHOLDER DATA STRUCTURES
 var urlDatabase = {
   "b2xVn2": {
     shortUrl:"b2xVn2",
@@ -29,6 +32,7 @@ const users = {
       "password": "password"
     }
   }
+
 //Generates Random 6 digit Alphanumeric code for short url or userID
 function generateRandomString() {
   let randString = ""
@@ -38,6 +42,7 @@ function generateRandomString() {
   }
   return randString
 }
+
 //FUNCTION CHECKS IF EMAIL ALREADY EXISTS IN USERS OBJECT
 function emailExists(email) {
   for (var userID in users) {
@@ -48,7 +53,7 @@ function emailExists(email) {
   return false
 }
 
-//FUNCTION TO FIND USER id
+//FUNCTION TO POPULATE ARRAY WITH ALL URLS CONNECTED TO USER ID
 function findUser(userToBeFound) {
   matchingUrls = []
   for (var currentUser in urlDatabase) {
@@ -59,13 +64,7 @@ function findUser(userToBeFound) {
   return matchingUrls
 }
 
-
-//Deals with homePage
-app.get("/", (req, res) => {
-  res.redirect("/urls")
-});
-
-//Deals with new Url Page
+//CREATES A NEW URL
 app.get("/urls/new", (req, res) => {
   if (req.cookies["user_ID"]) {
     let templateVars = {
@@ -77,7 +76,7 @@ app.get("/urls/new", (req, res) => {
   };
 });
 
-//Deletes a url from the list
+//DELETES A URL FROM LIST (CHANGE TO METHOD OVERRIDE EVENTUALLY)
 app.post("/urls/:id/delete", function (req, res) {
   if(urlDatabase[req.params.id].userID === req.cookies["user_ID"]){
     delete urlDatabase[req.params.id]
@@ -87,23 +86,24 @@ app.post("/urls/:id/delete", function (req, res) {
   }
 });
 
-//What happens on LOG In Request
+//LOG IN
 app.post("/urls/login", function (req, res) {
   let email = req.body.email
-  let password = req.body.password
+  let password = req.body.password  //Might get rid of this line and directly compare passwords in if statement
+  console.log(password)
   let emailExist = false
   let passwordExist = false
   for (var user in users) {
     if (users[user].email === email){
       emailExist = true
-      if(users[user].password === password){
+      if(bcrypt.compareSync((password), users[user].password)){
         passwordExist = true
         res.cookie("user_ID", users[user].id)
         res.redirect("/urls")
       }
     }
   }
-  // Checking for message to send
+  // WHAT GETS SENT ON ERROR MESSAGES
   if (!emailExist){
     res.statusCode = 403
     res.send('Error: This account does not exist please register email')
@@ -123,13 +123,13 @@ app.get("/urls/login", function (req, res){
   res.render("urls_login", templateVars);
 });
 
-//Logs out of website and clears the username cookie
+//Logs out of website and clears the user_ID cookie
 app.post("/urls/logout", function (req, res){
   res.clearCookie("user_ID")
   res.redirect("/urls/login")
 })
 
-//Updates an exist Long url
+//Updates an existing Long url -- Tied to User ID now
 app.post("/urls/:id/update", function (req,res) {
   if(urlDatabase[req.params.id].userID === req.cookies["user_ID"]){
     urlDatabase[req.params.id].longUrl = (req.body.updateURL)
@@ -199,6 +199,7 @@ app.get("/register", function (req, res){
 app.post("/register", function (req,res){
   let email = req.body.email
   let password = req.body.password
+  let hashedPassword = bcrypt.hashSync(password, 10)
   if (!email || !password) {            //Handles error if either email or password are blank
     res.statusCode = 400
     res.send('Error: Email or Password are empty')
@@ -212,13 +213,18 @@ app.post("/register", function (req,res){
     users[rand] = {
       id: rand,
       email: email,
-      password: password
+      password: hashedPassword
     }
-    console.log(users)
+    console.log("Current User Database" , users)
     res.cookie("user_ID", rand) //Assign cookie to userID
     res.redirect("/urls")
   }
 })
+
+//REDIRECTS HOMEPAGE TO URLS PAGE
+app.get("/", (req, res) => {
+  res.render("urls_home")
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
