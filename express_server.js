@@ -7,7 +7,9 @@ app.set("view engine", "ejs")
 const bcrypt = require('bcrypt');
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
+const methodOverride = require('method-override')
+app.use(methodOverride('_method'))
 
 app.use(cookieSession({
   name: 'session',
@@ -82,20 +84,22 @@ app.get("/urls/new", (req, res) => {
 });
 
 //Updates an existing Long url -- Tied to User ID now
-app.post("/urls/:id/update", function (req,res) {
+app.put("/urls/:id/update", function (req,res) {
   if(urlDatabase[req.params.id].userID === req.session.user_id){
     urlDatabase[req.params.id].longUrl = (req.body.updateURL)
   res.redirect("/urls")
+  console.log(req.method)
   } else {
     res.send("Do not have permission to update this url")
   }
 })
 
 //DELETES A URL FROM LIST (CHANGE TO METHOD OVERRIDE EVENTUALLY)
-app.post("/urls/:id/delete", function (req, res) {
+app.delete("/urls/:id/delete", function (req, res) {
   if(urlDatabase[req.params.id].userID === req.session.user_id){
     delete urlDatabase[req.params.id]
     res.redirect("/urls")
+    console.log(req.method)
   } else {
     res.send("You don't have permission to delete this")
   }

@@ -14,7 +14,7 @@
     <li style="padding-left: 50px"> Current short url: <%=  shortUrl %> </li>
     <li style="padding-left: 50px"> <a href ="/u/<%=shortUrl%>"> Visit Website </a> </li>
 
-    <form style="padding-left: 50px" action="/urls/<%= shortUrl %>/update" method="POST">
+    <form style="padding-left: 50px" action="/urls/<%= shortUrl %>/update?_method=PUT"" method="POST">
     <input name="updateURL" value="">
     <input type="submit" value="Update!">
 
