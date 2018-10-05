@@ -5,10 +5,16 @@ var PORT = 8080; // default port 8080
 
 app.set("view engine", "ejs")
 const bcrypt = require('bcrypt');
-var cookieParser = require('cookie-parser')
+// var cookieParser = require('cookie-parser')
+var cookieSession = require('cookie-session')
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
+// app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  secret: 'my secret string'
+}))
+
 
 
 // PLACEHOLDER DATA STRUCTURES
@@ -66,9 +72,9 @@ function findUser(userToBeFound) {
 
 //CREATES A NEW URL
 app.get("/urls/new", (req, res) => {
-  if (req.cookies["user_ID"]) {
+  if (req.session.user_id) {
     let templateVars = {
-      user: users[req.cookies["user_ID"]]
+      user: users[req.session.user_id]
     }
     res.render("urls_new", templateVars)
   } else {
@@ -76,9 +82,19 @@ app.get("/urls/new", (req, res) => {
   };
 });
 
+//Updates an existing Long url -- Tied to User ID now
+app.post("/urls/:id/update", function (req,res) {
+  if(urlDatabase[req.params.id].userID === req.session.user_id){
+    urlDatabase[req.params.id].longUrl = (req.body.updateURL)
+  res.redirect("/urls")
+  } else {
+    res.send("Do not have permission to update this url")
+  }
+})
+
 //DELETES A URL FROM LIST (CHANGE TO METHOD OVERRIDE EVENTUALLY)
 app.post("/urls/:id/delete", function (req, res) {
-  if(urlDatabase[req.params.id].userID === req.cookies["user_ID"]){
+  if(urlDatabase[req.params.id].userID === req.session.user_id){
     delete urlDatabase[req.params.id]
     res.redirect("/urls")
   } else {
@@ -89,16 +105,14 @@ app.post("/urls/:id/delete", function (req, res) {
 //LOG IN
 app.post("/urls/login", function (req, res) {
   let email = req.body.email
-  let password = req.body.password  //Might get rid of this line and directly compare passwords in if statement
-  console.log(password)
   let emailExist = false
   let passwordExist = false
   for (var user in users) {
     if (users[user].email === email){
       emailExist = true
-      if(bcrypt.compareSync((password), users[user].password)){
+      if(bcrypt.compareSync((req.body.password), users[user].password)){
         passwordExist = true
-        res.cookie("user_ID", users[user].id)
+        req.session.user_id = users[user].id
         res.redirect("/urls")
       }
     }
@@ -114,38 +128,28 @@ app.post("/urls/login", function (req, res) {
   }
 })
 
-
-//Handles Login Page
+//Handles Showing Login Page
 app.get("/urls/login", function (req, res){
  let templateVars = {
-    user: users[req.cookies["user_ID"]]
+    user: users[req.session.user_id]
   }
   res.render("urls_login", templateVars);
 });
 
 //Logs out of website and clears the user_ID cookie
-app.post("/urls/logout", function (req, res){
-  res.clearCookie("user_ID")
-  res.redirect("/urls/login")
-})
-
-//Updates an existing Long url -- Tied to User ID now
-app.post("/urls/:id/update", function (req,res) {
-  if(urlDatabase[req.params.id].userID === req.cookies["user_ID"]){
-    urlDatabase[req.params.id].longUrl = (req.body.updateURL)
-  res.redirect("/urls")
-  } else {
-    res.send("Do not have permission to update this url")
-  }
+app.post("/logout", function (req, res){
+  req.session = null
+  console.log("YOU HAVE LOGGED OUT")
+  res.redirect("/")
 })
 
 //URL Page for specific url
 app.get("/urls/:id", function (req, res) {
-  if(urlDatabase[req.params.id].userID === req.cookies["user_ID"]){
+  if(urlDatabase[req.params.id].userID === req.session.user_id){
     let templateVars = {
       shortUrl: req.params.id,
       fullUrl: urlDatabase[req.params.id],
-      user: users[req.cookies["user_ID"]],
+      user: users[req.session.user_id],
     }
     res.render("urls_show", templateVars);
   } else{
@@ -155,10 +159,10 @@ app.get("/urls/:id", function (req, res) {
 
 //List of URL Pages and Homepage
 app.get("/urls", function (req, res) {
-  findUser(req.cookies["user_ID"])
+  findUser(req.session.user_id)
   let templateVars = {
     urls: matchingUrls,
-    user: users[req.cookies["user_ID"]],
+    user: users[req.session.user_id],
   }
   res.render("urls_index", templateVars);
 });
@@ -170,7 +174,7 @@ app.post("/urls", (req, res) => {
   urlDatabase[rand] = {
     shortUrl: rand,
     longUrl: req.body.longURL,
-    userID: req.cookies["user_ID"]
+    userID: req.session.user_id
   }
   res.redirect('urls/' + rand);
 });
@@ -191,7 +195,7 @@ app.get("/urls.json", (req, res) => {
 //REGISTRATION INFORMATION
 app.get("/register", function (req, res){
   let templateVars = {
-    user: users[req.cookies["UserID"]]
+    user: req.session.user_id
   }
   res.render("urls_register", templateVars);
 });
@@ -216,12 +220,12 @@ app.post("/register", function (req,res){
       password: hashedPassword
     }
     console.log("Current User Database" , users)
-    res.cookie("user_ID", rand) //Assign cookie to userID
+    req.session.user_id = rand //Assign cookie to userID
     res.redirect("/urls")
   }
 })
 
-//REDIRECTS HOMEPAGE TO URLS PAGE
+//HOMEPAGE
 app.get("/", (req, res) => {
   res.render("urls_home")
 });

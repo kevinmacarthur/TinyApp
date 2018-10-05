@@ -1,0 +1,19 @@
+<div class="header clearfix">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+
+              <% if (user) { %>
+              <li role="presentation"> Logged in as <%= user.email %> </li
+              <li role="presentation">
+                <form action="/logout" method="POST">
+                  <input type="submit" value="Logout">
+                </form>
+              <% } %>
+<!-- NEED TO GET LOGGED IN AND LOGOUT ON SAME LINE AS OTHERS IF POSSIBLE -->
+                <li role="presentation"><a href="/urls/login">Login</a></li>
+                <li role="presentation"><a href="/register">Register</a></li>
+                <li role="presentation"><a href="/urls">My Urls</a></li>
+            </ul>
+            <h3 class="text-muted">Kevs TinyApp</h3>
+        </nav>
+    </div>

@@ -3,10 +3,9 @@
 <Header>
   <h1> Kevs Lovely TinyApp </h1>
   <% if (user) { %>
-    <form action="/urls/logout" method="POST">
-      <p style="font-size:20px"> Logged in as <%= user.email %> </p>
+    <p style="font-size:20px"> Logged in as <%= user.email %> </p>
+    <form display = action="/logout" method="POST">
       <input type="submit" value="Logout">
-      <a href = "/urls/new" style="font-size:20px"> Shorten a New URL!!! </a>
     </form>
   <% } else { %>
     <h2>Hello,
