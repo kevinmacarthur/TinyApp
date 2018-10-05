@@ -1,25 +1,18 @@
-<!DOCTYPE html>
-
 <html lang="en">
   <head>
-    <title>TinyApp</title>
     <% include ./partials/_head%>
   </head>
-  <header>
-    <% include ./partials/navbar%>
-  </header>
-  <body>
-
-    <li style="padding-left: 50px"> Current long url: <%=  fullUrl.longUrl %> </li>
-    <li style="padding-left: 50px"> Current short url: <%=  shortUrl %> </li>
-    <li style="padding-left: 50px"> <a href ="/u/<%=shortUrl%>"> Visit Website </a> </li>
-
-    <form style="padding-left: 50px" action="/urls/<%= shortUrl %>/update?_method=PUT"" method="POST">
+  <body style="font-size:15px; padding:10px;">
+    <header>
+      <% include ./partials/navbar%>
+    </header>
+    <p style="padding-left: 10px"> Current long url: <%=  fullUrl.longUrl %> </p>
+    <p style="padding-left: 10px"> Current short url: <%=  shortUrl %> </p>
+    <p style="padding-left: 10px"> <a href ="/u/<%=shortUrl%>"> Visit <%=fullUrl.longUrl%> </a> </p>
+    <form style="padding-left: 10px" action="/urls/<%= shortUrl %>/update?_method=PUT"" method="POST">
     <input name="updateURL" value="">
     <input type="submit" value="Update!">
-
-  </form>
-
+    </form>
     <footer>
       <p><% include ./partials/_footer%></p>
     </footer>

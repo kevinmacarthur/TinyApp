@@ -1,19 +1,22 @@
-<div class="header clearfix">
-        <nav>
-            <ul class="nav nav-pills pull-right">
 
-              <% if (user) { %>
-              <li role="presentation"> Logged in as <%= user.email %> </li
-              <li role="presentation">
-                <form action="/logout" method="POST">
-                  <input type="submit" value="Logout">
-                </form>
-                <li role="presentation"><a href="/urls">My Urls</a></li>
-              <% } else { %>
-                <li role="presentation"><a href="/urls/login">Login</a></li>
-                <li role="presentation"><a href="/register">Register</a></li>
-              <% } %>
-            </ul>
-            <h3 style="padding-left:50px;" class="text-muted">Kevs TinyApp</h3>
-        </nav>
+<div class="header clearfix">
+  <nav>
+    <div class="jumbotron" style="height: 20px">
+    <ul class="nav nav-pills pull-right">
+      <% if (user) { %>
+        <li role="presentation" style='padding-top:10px'> Logged in as <%= user.email %> </li>
+        <li role="presentation">
+          <form action="/logout" method="POST">
+            <input type="submit" value="Logout" style="background:none;border:0;color:#3f68a8; padding-top:10px;">
+          </form>
+        </li>
+        <li role="presentation"><a href="/urls">My Urls</a></li>
+      <% } else { %>
+        <li role="presentation"><a href="/urls/login">Login</a></li>
+        <li role="presentation"><a href="/register">Register</a></li>
+      <% } %>
+    </ul>
+    <h3 style="padding-left:10px; padding-bottom: 10px" class="text-muted">Kevs TinyApp</h3>
     </div>
+  </nav>
+</div>

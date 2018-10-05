@@ -2,12 +2,16 @@
   <head>
     <% include ./partials/_head%>
   </head>
-  <Header>
-    <% include ./partials/navbar%>
-    <li style="font-size:15px; padding-left:50px;"> Log In to TinyApp and explore the world of Mini Urls!!! </li>
-    <li style="font-size:15px; padding-left:50px;"> If you dont have an account please <a href = "/register"> register </a> </li>
-  </header>
-  <body style="font-size:15px; padding:50px;">
+  <body style="font-size:15px; padding:10px;">
+    <Header>
+      <% include ./partials/navbar%>
+    </header>
+    <p style="font-size:15px; padding-left:10px;">
+      Log In to TinyApp and explore the world of Mini Urls!!!
+    </p>
+    <p style="font-size:15px; padding-left:10px;">
+      If you dont have an account please <a href = "/register"> register </a>
+    </p>
     <form action="/urls/login" method="POST" style="margin:50px;">
       <input type="email" name="email" placeholder="example@example.com" style="width: 300px">
       <p>
@@ -20,3 +24,4 @@
     </footer>
   </body>
 </html>
+

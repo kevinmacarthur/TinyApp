@@ -2,17 +2,17 @@
   <head>
     <% include ./partials/_head%>
   </head>
-  <header>
-    <% include ./partials/navbar%>
-  </header>
-  <body style="font-size:15px; padding:50px;">
-    <p style="padding-left: 50px"> Register for TinyApp and explore the world of Mini URLS!!! </p>
+  <body style="font-size:15px; padding:10px;">
+    <header>
+      <% include ./partials/navbar%>
+    </header>
+    <p style="padding-left: 10px"> Register for TinyApp and explore the world of Mini URLS!!! </p>
     <form action="/register" method="POST" style="margin:50px;">
       <input type="email" name="email" placeholder="example@example.com" style="width: 300px">
       <p>
       </p>
       <input type="password" name="password" placeholder="password" style="width: 300px">
-      <input type="submit" value="Register now!" style="margin-top:20px;">
+      <input type="submit" value="Register now!">
     </form>
     <footer>
       <p><% include ./partials/_footer%></p>

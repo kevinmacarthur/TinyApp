@@ -5,26 +5,24 @@
     <% include ./partials/_head%>
   </head>
 
-  <header> <% include ./partials/navbar %> </header>
-
-  <body>
-    <h2 style="font-size:20px; padding-left:50px">Your Urls </h2>
-    <a href = "/urls/new" style="padding-left:50px"> Shorten a New URL!!! </a>
+  <body style="padding-left:10px">
+    <header>
+      <% include ./partials/navbar %>
+    </header>
+    <h1 style="padding-left:10px">My Urls</h1>
     <p>
 
     </p>
     <% for (var url of urls) { %>
-      <p style="padding-left:50px">
-        <b> Short URL: </b> <a href = "/urls/<%= url.shortUrl %>"> <%= url.shortUrl %> </a>
-        <b> Long URL: </b> <%=  url.longUrl %> <a href="/urls/<%= url.shortUrl %>"> Edit Link </a>
-        <form style="padding-left:50px" method="POST" action="/urls/<%= url.shortUrl%>/delete?_method=DELETE"">
-          <input type ="submit" value="Delete">
-        </form>
-      </p>
+        <p style="padding-left:10px; display: inline-block;" role="presentation">
+          <b> Short Url: </b> <a href = "/urls/<%= url.shortUrl %>"> <%= url.shortUrl %> </a>
+          <b> Long Url: </b> <%=  url.longUrl %> <a href="/urls/<%= url.shortUrl %>"> <u>Edit</u> </a>
+          <form method="POST" action="/urls/<%= url.shortUrl%>/delete?_method=DELETE" style = "display: inline">
+            <input type ="submit" value="Delete" style="background:none;border:0;color:#3f68a8;">
+          </form>
+        </p>
     <% } %>
-    <p>
-
-    </p>
+    <h4> <a href = "/urls/new" style="padding-left:10px"> <u>Shorten a New Url </u></a></h4>
 
     <footer>
       <p><% include ./partials/_footer%></p>
