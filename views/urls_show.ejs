@@ -6,12 +6,13 @@
     <% include ./partials/_head%>
   </head>
   <header>
-    <% include ./partials/_header %>
+    <% include ./partials/navbar%>
   </header>
   <body>
 
     <li> Current long url: <%=  fullUrl.longUrl %> </li>
     <li> Current short url: <%=  shortUrl %> </li>
+    <li> <a href ="/u/<%=shortUrl%>"> Visit Website </a> </li>
 
     <form action="/urls/<%= shortUrl %>/update" method="POST">
     <input name="updateURL" value="">

@@ -5,10 +5,11 @@
     <% include ./partials/_head%>
   </head>
 
-  <header> <% include ./partials/_header %> </header>
+  <header> <% include ./partials/navbar %> </header>
 
   <body>
     <h2>Your Urls </h2>
+    <a href = "/urls/new" style="font-size:20px"> Shorten a New URL!!! </a>
     <% for (var url of urls) { %>
       <li>
         <b> Short URL: </b> <a href = "/urls/<%= url.shortUrl %>"> <%= url.shortUrl %> </a>
