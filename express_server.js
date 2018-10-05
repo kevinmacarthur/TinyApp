@@ -5,11 +5,10 @@ var PORT = 8080; // default port 8080
 
 app.set("view engine", "ejs")
 const bcrypt = require('bcrypt');
-// var cookieParser = require('cookie-parser')
-var cookieSession = require('cookie-session')
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
-// app.use(cookieParser());
+const cookieSession = require('cookie-session')
+
 app.use(cookieSession({
   name: 'session',
   secret: 'my secret string'
@@ -182,7 +181,11 @@ app.post("/urls", (req, res) => {
 //Sends user to actual long url
 app.get("/u/:shortURL", (req, res) => {
   let realUrl = urlDatabase[req.params.shortURL].longUrl
-  res.redirect(realUrl);
+  if (realUrl.slice(0,4) === 'http'){
+    res.redirect(realUrl);
+  } else {
+    res.redirect('http://' + realUrl)
+  }
 });
 
 app.get("/urls.json", (req, res) => {
@@ -195,7 +198,7 @@ app.get("/urls.json", (req, res) => {
 //REGISTRATION INFORMATION
 app.get("/register", function (req, res){
   let templateVars = {
-    user: req.session.user_id
+    user: users[req.session.user_id]
   }
   res.render("urls_register", templateVars);
 });

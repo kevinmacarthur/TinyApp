@@ -8,16 +8,19 @@
   <header> <% include ./partials/navbar %> </header>
 
   <body>
-    <h2>Your Urls </h2>
-    <a href = "/urls/new" style="font-size:20px"> Shorten a New URL!!! </a>
+    <h2 style="font-size:20px; padding-left:50px">Your Urls </h2>
+    <a href = "/urls/new" style="padding-left:50px"> Shorten a New URL!!! </a>
+    <p>
+
+    </p>
     <% for (var url of urls) { %>
-      <li>
+      <p style="padding-left:50px">
         <b> Short URL: </b> <a href = "/urls/<%= url.shortUrl %>"> <%= url.shortUrl %> </a>
         <b> Long URL: </b> <%=  url.longUrl %> <a href="/urls/<%= url.shortUrl %>"> Edit Link </a>
-        <form method="POST" action="/urls/<%= url.shortUrl%>/delete">
+        <form style="padding-left:50px" method="POST" action="/urls/<%= url.shortUrl%>/delete">
           <input type ="submit" value="Delete">
         </form>
-      </li>
+      </p>
     <% } %>
     <p>
 
